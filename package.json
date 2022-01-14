@@ -1,0 +1,38 @@
+{
+    "private": true,
+    "name": "remix-app-template",
+    "description": "",
+    "license": "",
+    "scripts": {
+        "build": "npm run build:css && remix build",
+        "build:css": "sass styles:app/styles --style compressed --load-path node_modules",
+        "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
+        "dev:css": "sass styles:app/styles --watch --load-path node_modules",
+        "postinstall": "remix setup node",
+        "start": "remix-serve build"
+    },
+    "dependencies": {
+        "@fremtind/jkl-button": "^6.0.8",
+        "@fremtind/jkl-button-react": "^8.0.13",
+        "@fremtind/jkl-core": "^8.3.1",
+        "@fremtind/jkl-webfonts": "^1.1.8",
+        "@remix-run/react": "^1.1.1",
+        "@remix-run/serve": "^1.1.1",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "remix": "^1.1.1"
+    },
+    "devDependencies": {
+        "@remix-run/dev": "^1.1.1",
+        "@types/react": "^17.0.24",
+        "@types/react-dom": "^17.0.9",
+        "concurrently": "^7.0.0",
+        "prettier": "^2.5.1",
+        "sass": "^1.48.0",
+        "typescript": "^4.1.2"
+    },
+    "engines": {
+        "node": ">=14"
+    },
+    "sideEffects": false
+}
