@@ -14,7 +14,7 @@ export default function App() {
                 <Meta />
                 <Links />
             </head>
-            <body className="jkl">
+            <body className="jkl" data-theme="light">
                 <Outlet />
                 <ScrollRestoration />
                 <Scripts />
