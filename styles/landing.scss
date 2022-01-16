@@ -1,0 +1,12 @@
+@use "@fremtind/jkl-core/jkl";
+
+.presentation-list {
+    list-style: none;
+    padding-inline-start: 0;
+
+    &__item {
+        &-header {
+            @include jkl.text-style("heading-1");
+        }
+    }
+}

@@ -1,5 +1,17 @@
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "remix";
-import type { MetaFunction } from "remix";
+import { Links, LinksFunction, LiveReload, Meta, MetaFunction, Outlet, Scripts, ScrollRestoration } from "remix";
+import coreStyle from "@fremtind/jkl-core/core.min.css";
+import buttonStyle from "@fremtind/jkl-button/button.min.css";
+import textInputStyle from "@fremtind/jkl-text-input/text-input.min.css";
+import fieldGroupStyle from "@fremtind/jkl-field-group/field-group.min.css";
+
+const jklStyles = [coreStyle, buttonStyle, textInputStyle, fieldGroupStyle];
+
+export const links: LinksFunction = () => [
+    ...jklStyles.map((style) => ({
+        href: style,
+        rel: "stylesheet",
+    })),
+];
 
 export const meta: MetaFunction = () => {
     return { title: "Fagtimen - Remix" };

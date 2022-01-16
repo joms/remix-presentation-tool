@@ -1,23 +1,23 @@
-import { Form, json, Link, LinksFunction, LoaderFunction, useLoaderData } from "remix";
+import { Form, json, Link, LinksFunction, LoaderFunction, Outlet, useLoaderData } from "remix";
 import { TertiaryButton } from "@fremtind/jkl-button-react";
-import coreStyle from "@fremtind/jkl-core/core.min.css";
-import buttonStyle from "@fremtind/jkl-button/button.min.css";
-import textInputStyle from "@fremtind/jkl-text-input/text-input.min.css";
-import fieldGroupStyle from "@fremtind/jkl-field-group/field-group.min.css";
 import { hasUserSession } from "../utils/session.server";
+import { findPresentations, Presentation } from "../utils/fs-utils.server";
+import landingStyles from "../styles/landing.css";
 
-const jklStyles = [coreStyle, buttonStyle, textInputStyle, fieldGroupStyle];
+interface LoaderData {
+    isAuthenticated: boolean;
+    presentations?: Presentation[];
+}
 
 export const links: LinksFunction = () => [
-    ...jklStyles.map((style) => ({
-        href: style,
+    {
+        href: landingStyles,
         rel: "stylesheet",
-    })),
+    },
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
     const session = await hasUserSession(request);
-    console.log(session);
 
     if (!session) {
         return json({
@@ -27,20 +27,23 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     return json({
         isAuthenticated: true,
+        presentations: await findPresentations(),
     });
 };
 
 export default function Index() {
-    const { isAuthenticated } = useLoaderData<{ isAuthenticated: boolean }>();
+    const { isAuthenticated, presentations } = useLoaderData<LoaderData>();
 
     if (!isAuthenticated) {
         return (
             <main>
-                <h1>Velkommen til fagtimen!</h1>
-                <Link to="logg-inn" className="jkl-link">
-                    Logg inn
-                </Link>{" "}
-                for å presentere.
+                <h1 className="jkl-title">Velkommen til fagtimen!</h1>
+                <p className="jkl-body">
+                    <Link to="logg-inn" className="jkl-link">
+                        Logg inn
+                    </Link>{" "}
+                    for å presentere.
+                </p>
             </main>
         );
     }
@@ -53,7 +56,39 @@ export default function Index() {
                     <TertiaryButton>Logg ut</TertiaryButton>
                 </Form>
             </header>
-            <main>Hello, world!</main>
+            <main>
+                {!presentations || !presentations.length ? (
+                    <p>
+                        Du har laget noen presentasjoner enda.{" "}
+                        <Link className="jkl-link" to="presentasjoner/ny-presentasjon">
+                            Lag ny presentasjon
+                        </Link>
+                    </p>
+                ) : (
+                    <>
+                        <h1 className="jkl-title">Presentasjoner</h1>
+                        <Link className="jkl-button jkl-button--primary" to="presentasjoner/ny-presentasjon">
+                            Lag ny presentasjon
+                        </Link>
+                        <ul className="presentation-list">
+                            {presentations.map(({ name, slides }) => (
+                                <li className="presentation-list__item" key={name}>
+                                    <h2 className="presentation-list__item-header">{name.split("-").join(" ")}</h2>
+                                    {Array.isArray(slides) && slides.length > 0 && (
+                                        <Link to={`${name}/${slides[0].id}`} className="jkl-link">
+                                            Presenter
+                                        </Link>
+                                    )}
+                                    <Link to={`presentasjoner/${name}`} className="jkl-link">
+                                        Rediger
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+                <Outlet />
+            </main>
         </>
     );
 }

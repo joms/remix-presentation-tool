@@ -1,21 +1,8 @@
-import { ActionFunction, Form, json, LinksFunction, LoaderFunction, redirect, useActionData } from "remix";
+import { ActionFunction, Form, json, LoaderFunction, redirect, useActionData } from "remix";
 import { TextInput } from "@fremtind/jkl-text-input-react";
 import { PrimaryButton } from "@fremtind/jkl-button-react";
-import coreStyle from "@fremtind/jkl-core/core.min.css";
-import buttonStyle from "@fremtind/jkl-button/button.min.css";
-import textInputStyle from "@fremtind/jkl-text-input/text-input.min.css";
-import fieldGroupStyle from "@fremtind/jkl-field-group/field-group.min.css";
 import { FieldGroup } from "@fremtind/jkl-field-group-react";
 import { createUserSession, hasUserSession, login } from "../utils/session.server";
-
-const jklStyles = [coreStyle, buttonStyle, textInputStyle, fieldGroupStyle];
-
-export const links: LinksFunction = () => [
-    ...jklStyles.map((style) => ({
-        href: style,
-        rel: "stylesheet",
-    })),
-];
 
 interface FormData {
     username: string;
@@ -40,13 +27,15 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (await hasUserSession(request)) {
         return redirect("/");
     }
+
+    return null;
 };
 
 export default function Login() {
     const actionData = useActionData<{ error: string }>();
     return (
         <main>
-            <h1>Velkommen til fagtimen!</h1>
+            <h1 className="jkl-title">Velkommen til fagtimen!</h1>
             <Form method="post">
                 <FieldGroup
                     variant="large"
