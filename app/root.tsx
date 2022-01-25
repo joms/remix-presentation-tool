@@ -1,10 +1,11 @@
 import { Links, LinksFunction, LiveReload, Meta, MetaFunction, Outlet, Scripts, ScrollRestoration } from "remix";
 import coreStyle from "@fremtind/jkl-core/core.min.css";
+import logoStyle from "@fremtind/jkl-logo/logo.min.css";
 import buttonStyle from "@fremtind/jkl-button/button.min.css";
 import textInputStyle from "@fremtind/jkl-text-input/text-input.min.css";
 import fieldGroupStyle from "@fremtind/jkl-field-group/field-group.min.css";
 
-const jklStyles = [coreStyle, buttonStyle, textInputStyle, fieldGroupStyle];
+const jklStyles = [coreStyle, logoStyle, buttonStyle, textInputStyle, fieldGroupStyle];
 
 export const links: LinksFunction = () => [
     ...jklStyles.map((style) => ({

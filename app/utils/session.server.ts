@@ -15,7 +15,7 @@ const storage = createCookieSessionStorage({
 });
 
 export const login = async ({ username, password }: { username: string; password: string }) => {
-    if (username === "fremtind" && password === "fagtimen") {
+    if (username === "root" && password === "root") {
         return true;
     }
 
