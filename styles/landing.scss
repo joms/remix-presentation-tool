@@ -64,13 +64,45 @@
     }
 }
 
-.presentation-list {
-    list-style: none;
-    padding-inline-start: 0;
+.presentations {
+    h1 {
+        @include jkl.text-style("title");
+        margin-bottom: jkl.$spacing-xl;
+    }
 
-    &__item {
-        &-header {
-            @include jkl.text-style("heading-1");
+    .presentation-list-empty-error {
+        text-align: center;
+
+        @include jkl.text-style("title");
+
+        .jkl-button {
+            margin-top: jkl.$spacing-xl;
+        }
+    }
+
+    .presentation-list {
+        margin-top: jkl.$spacing-3xl;
+        list-style: none;
+        padding-inline-start: 0;
+
+        .presentation-card {
+            max-width: 70ch;
+            margin-bottom: jkl.$spacing-3xl;
+
+            &__header {
+                @include jkl.text-style("heading-1");
+            }
+
+            &__content {
+                @include jkl.text-style("body");
+                margin-bottom: jkl.$spacing-m;
+            }
+
+            &__footer {
+                @include jkl.text-style("body");
+                display: flex;
+                gap: jkl.$spacing-2xl;
+            }
         }
     }
 }

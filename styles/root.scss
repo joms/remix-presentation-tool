@@ -1,3 +1,16 @@
+@use "@fremtind/jkl-core/jkl";
 @use "@fremtind/jkl-webfonts/webfonts.scss" with (
     $webfonts-dir: "/fonts"
 );
+
+nav {
+    background-color: jkl.$color-sand;
+    padding: jkl.$spacing-xs jkl.$spacing-m jkl.$spacing-s jkl.$spacing-m;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+main {
+    margin: jkl.$spacing-xl jkl.$spacing-2xl;
+}

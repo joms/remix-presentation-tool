@@ -1,20 +1,15 @@
 import { ActionFunction, Form, json, LinksFunction, redirect, useActionData } from "remix";
 import { PrimaryButton } from "@fremtind/jkl-button-react";
-import coreStyle from "@fremtind/jkl-core/core.min.css";
-import buttonStyle from "@fremtind/jkl-button/button.min.css";
-import textInputStyle from "@fremtind/jkl-text-input/text-input.min.css";
-import fieldGroupStyle from "@fremtind/jkl-field-group/field-group.min.css";
-import { requireSession } from "../../utils/session.server";
-import { createPresentation, FsUtilErrors } from "../../utils/fs-utils.server";
 import { TextInput } from "@fremtind/jkl-text-input-react";
-
-const jklStyles = [coreStyle, buttonStyle, textInputStyle, fieldGroupStyle];
+import { requireSession } from "../../utils/session.server";
+import { createPresentation, FsUtilErrors, writeSlide } from "../../utils/fs-utils.server";
+import stylesLink from "../../styles/ny-presentasjon.css";
 
 export const links: LinksFunction = () => [
-    ...jklStyles.map((style) => ({
-        href: style,
+    {
+        href: stylesLink,
         rel: "stylesheet",
-    })),
+    },
 ];
 
 export const action: ActionFunction = async ({ request }) => {
@@ -40,6 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
             });
 
         default:
+            await writeSlide(createdPresentation, "");
             return redirect(`presentasjoner/${createdPresentation}`);
     }
 };
@@ -48,9 +44,12 @@ export default function NewPresentation() {
     const actionData = useActionData<{ error?: string }>();
 
     return (
-        <Form action="" method="post">
-            <TextInput label="Presentasjonnavn" name="presentation-name" required errorLabel={actionData?.error} />
-            <PrimaryButton>Lagre</PrimaryButton>
-        </Form>
+        <>
+            <h1>Ny presentasjon</h1>
+            <Form method="post">
+                <TextInput label="Presentasjonsavn" name="presentation-name" required errorLabel={actionData?.error} />
+                <PrimaryButton>Lagre</PrimaryButton>
+            </Form>
+        </>
     );
 }

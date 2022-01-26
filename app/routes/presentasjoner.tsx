@@ -1,7 +1,6 @@
-import { Form, Link, LoaderFunction, Outlet } from "remix";
-import { TertiaryButton } from "@fremtind/jkl-button-react";
-
+import { LoaderFunction, Outlet } from "remix";
 import { requireSession } from "../utils/session.server";
+import { NavHeader } from "../compontents/NavHeader";
 
 export const loader: LoaderFunction = async ({ request }) => {
     return await requireSession(request);
@@ -10,12 +9,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
     return (
         <>
-            <header>
-                <Link to="/">Fagtimen - Remix</Link>
-                <Form action="/logg-ut" method="post">
-                    <TertiaryButton>Logg ut</TertiaryButton>
-                </Form>
-            </header>
+            <NavHeader />
             <main>
                 <Outlet />
             </main>

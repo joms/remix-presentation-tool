@@ -16,6 +16,7 @@ import { findPresentations, Presentation } from "../utils/fs-utils.server";
 import landingStyles from "../styles/landing.css";
 import { TextInput } from "@fremtind/jkl-text-input-react";
 import { FieldGroup } from "@fremtind/jkl-field-group-react";
+import { NavHeader } from "../compontents/NavHeader";
 
 interface LoginFormData {
     username: string;
@@ -105,38 +106,40 @@ export default function Index() {
 
     return (
         <>
-            <header>
-                <Link to="/">Fagtimen - Remix</Link>
-                <Form action="/logg-ut" method="post">
-                    <TertiaryButton>Logg ut</TertiaryButton>
-                </Form>
-            </header>
-            <main>
+            <NavHeader />
+            <main className="presentations">
                 {!loaderData.presentations.length ? (
-                    <p>
-                        Du har laget noen presentasjoner enda.{" "}
-                        <Link className="jkl-link" to="presentasjoner/ny-presentasjon">
-                            Lag ny presentasjon
+                    <p className="presentation-list-empty-error">
+                        Du har ikke laget noen presentasjoner enda.
+                        <Link className="jkl-button jkl-button--primary" to="presentasjoner/ny-presentasjon">
+                            Lag din første presentasjon
                         </Link>
                     </p>
                 ) : (
                     <>
-                        <h1 className="jkl-title">Presentasjoner</h1>
+                        <h1>Dine presentasjoner</h1>
                         <Link className="jkl-button jkl-button--primary" to="presentasjoner/ny-presentasjon">
-                            Lag ny presentasjon
+                            Ny presentasjon
                         </Link>
+
                         <ul className="presentation-list">
                             {loaderData.presentations.map(({ name, slides }) => (
-                                <li className="presentation-list__item" key={name}>
-                                    <h2 className="presentation-list__item-header">{name.split("-").join(" ")}</h2>
-                                    {Array.isArray(slides) && slides.length > 0 && (
-                                        <Link to={`${name}/${slides[0].id}`} className="jkl-link">
-                                            Presenter
+                                <li className="presentation-card" key={name}>
+                                    <h2 className="presentation-card__header">{name.split("-").join(" ")}</h2>
+
+                                    <p className="presentation-card__content">{slides.length} slides</p>
+
+                                    <div className="presentation-card__footer">
+                                        {slides.length > 0 && (
+                                            <Link to={`${name}/${slides[0].id}`} className="jkl-link">
+                                                Presenter
+                                            </Link>
+                                        )}
+
+                                        <Link to={`presentasjoner/${name}`} className="jkl-link">
+                                            Rediger
                                         </Link>
-                                    )}
-                                    <Link to={`presentasjoner/${name}`} className="jkl-link">
-                                        Rediger
-                                    </Link>
+                                    </div>
                                 </li>
                             ))}
                         </ul>

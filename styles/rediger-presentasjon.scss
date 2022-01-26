@@ -1,0 +1,38 @@
+@use "@fremtind/jkl-core/jkl";
+@import "@fremtind/jkl-core/mixins/all";
+
+h1 {
+    @include jkl.text-style("title");
+    margin-bottom: jkl.$spacing-2xl;
+}
+
+.presentation-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: jkl.$spacing-3xl;
+    max-width: 1200px;
+}
+
+.slide-list {
+    display: grid;
+    gap: jkl.$spacing-2xl;
+    max-width: 1200px;
+}
+
+.slide-edit {
+    margin-bottom: jkl.$spacing-2xl;
+
+    &__header {
+        @include jkl.text-style("heading-1");
+        margin-bottom: jkl.$spacing-xs;
+    }
+    &__content {
+        .jkl-label {
+            @include screenreader-only;
+        }
+
+        .jkl-button {
+            margin-top: jkl.$spacing-l;
+        }
+    }
+}

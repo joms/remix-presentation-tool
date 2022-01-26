@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { statSync, readFileSync } from "fs";
-import { readdir, mkdir, stat, writeFile } from "fs/promises";
+import { readdir, mkdir, stat, writeFile, rm } from "fs/promises";
 import path from "path";
 
 export interface Slide {
@@ -94,4 +94,27 @@ export const writeSlide = async (presentationName: string, content: string, slid
     const slidePath = path.join(presentationPath, `${slideId}.mdx`);
 
     await writeFile(slidePath, content);
+};
+
+export const deletePresentation = async (presentationName: string) => {
+    const presentationPath = path.join(rootPath, presentationName);
+    try {
+        await rm(presentationPath, { recursive: true, force: true });
+        return true;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+};
+
+export const deleteSlide = async (presentationName: string, slideId: string) => {
+    const presentationPath = path.join(rootPath, presentationName);
+    const slidePath = path.join(presentationPath, `${slideId}.mdx`);
+
+    try {
+        await rm(slidePath, { force: true });
+        return true;
+    } catch {
+        return false;
+    }
 };

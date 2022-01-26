@@ -1,0 +1,10 @@
+@use "@fremtind/jkl-core/jkl";
+
+h1 {
+    @include jkl.text-style("title");
+    margin-bottom: jkl.$spacing-2xl;
+}
+
+.jkl-button {
+    margin-top: jkl.$spacing-l;
+}

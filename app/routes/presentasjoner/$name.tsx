@@ -1,30 +1,22 @@
-import { ActionFunction, Form, json, Link, LinksFunction, LoaderFunction, useLoaderData } from "remix";
-import { PrimaryButton } from "@fremtind/jkl-button-react";
-import coreStyle from "@fremtind/jkl-core/core.min.css";
-import buttonStyle from "@fremtind/jkl-button/button.min.css";
-import textInputStyle from "@fremtind/jkl-text-input/text-input.min.css";
-import fieldGroupStyle from "@fremtind/jkl-field-group/field-group.min.css";
-import { requireSession } from "../../utils/session.server";
-import { getSlidesForPresentation, writeSlide } from "../../utils/fs-utils.server";
+import { ActionFunction, json, Link, LinksFunction, LoaderFunction, redirect, useLoaderData, useSubmit } from "remix";
+import { PrimaryButton, SecondaryButton, TertiaryButton } from "@fremtind/jkl-button-react";
 import { TextArea } from "@fremtind/jkl-text-input-react";
-
-const jklStyles = [coreStyle, buttonStyle, textInputStyle, fieldGroupStyle];
+import { requireSession } from "../../utils/session.server";
+import { deletePresentation, deleteSlide, getSlidesForPresentation, writeSlide } from "../../utils/fs-utils.server";
+import styleLink from "../../styles/rediger-presentasjon.css";
 
 enum Actions {
     AddSlide = "AddSlide",
     ModifySlide = "ModifySlide",
-}
-
-interface LoaderData {
-    isAuthenticated: boolean;
-    presentations?: string[];
+    DeletePresentation = "DeletePresentation",
+    DeleteSlide = "DeleteSlide",
 }
 
 export const links: LinksFunction = () => [
-    ...jklStyles.map((style) => ({
-        href: style,
+    {
+        href: styleLink,
         rel: "stylesheet",
-    })),
+    },
 ];
 
 interface SlideFormData {
@@ -37,21 +29,51 @@ interface AddSlideFormData {
     action: Actions.AddSlide;
 }
 
-type ActionData = SlideFormData | AddSlideFormData;
+interface DeleteSlideData {
+    action: Actions.DeleteSlide;
+    id: string;
+}
+
+interface DeletePresentation {
+    action: Actions.DeletePresentation;
+}
+
+type ActionData = SlideFormData | AddSlideFormData | DeleteSlideData | DeletePresentation;
 
 export const action: ActionFunction = async ({ request, params }) => {
     await requireSession(request);
 
     const formData = Object.fromEntries(new URLSearchParams(await request.text())) as unknown as ActionData;
 
-    switch (formData.action) {
-        case Actions.ModifySlide:
-            await writeSlide(params.name!, formData.content, formData.slide);
-            return null;
+    switch (request.method.toLowerCase()) {
+        case "post":
+            switch (formData.action) {
+                case Actions.ModifySlide:
+                    await writeSlide(params.name!, formData.content, formData.slide);
+                    return null;
 
-        case Actions.AddSlide:
-            await writeSlide(params.name!, "");
-            return null;
+                case Actions.AddSlide:
+                    await writeSlide(params.name!, "");
+                    return null;
+            }
+        case "delete":
+            switch (formData.action) {
+                case Actions.DeleteSlide:
+                    if (await deleteSlide(params.name!, formData.id)) {
+                        return null;
+                    } else {
+                        return json({ error: "Noe gikk galt" }, { status: 500 });
+                    }
+
+                case Actions.DeletePresentation:
+                    console.log("delete presentation");
+                    if (await deletePresentation(params.name!)) {
+                        console.log("yolo");
+                        return redirect("/");
+                    } else {
+                        return json({ error: "Noe gikk galt" }, { status: 500 });
+                    }
+            }
     }
 };
 
@@ -67,6 +89,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function Presentation() {
     const { presentation } = useLoaderData<{ presentation: Array<{ id: string; content: string }> }>();
+    const submit = useSubmit();
 
     if (!presentation.length) {
         return (
@@ -81,25 +104,62 @@ export default function Presentation() {
 
     return (
         <>
-            <h1>Oppdater presentasjon</h1>
-            <section>
-                <h2 className="jkl-sr-only">Legg til slide</h2>
-                <form method="post">
-                    <input type="radio" name="action" value={Actions.AddSlide} checked hidden readOnly />
-                    <PrimaryButton>Legg til slide</PrimaryButton>
-                </form>
-            </section>
-            {presentation.map((p, i) => (
-                <section key={p.id}>
-                    <h2>#{i + 1}</h2>
+            <h1>Rediger presentasjon</h1>
+
+            <div className="presentation-actions">
+                <section>
+                    <h2 className="jkl-sr-only">Legg til slide</h2>
                     <form method="post">
-                        <TextArea defaultValue={p.content} label="Slide content" name="content" />
-                        <input type="radio" name="slide" value={p.id} checked hidden readOnly />
-                        <input type="radio" name="action" value={Actions.ModifySlide} checked hidden readOnly />
-                        <PrimaryButton>Lagre</PrimaryButton>
+                        <input type="radio" name="action" value={Actions.AddSlide} checked hidden readOnly />
+                        <PrimaryButton>Legg til slide</PrimaryButton>
                     </form>
                 </section>
-            ))}
+
+                <section>
+                    <h2 className="jkl-sr-only">Slett presentasjon</h2>
+                    <TertiaryButton
+                        onClick={() => {
+                            if (confirm("Er du sikker på at du vil slette denne presentasjonen?")) {
+                                submit({ action: Actions.DeletePresentation }, { method: "delete" });
+                            }
+                        }}
+                    >
+                        Slett presentasjon
+                    </TertiaryButton>
+                </section>
+            </div>
+
+            <section className="slide-list">
+                <h2 className="jkl-sr-only">Slides</h2>
+
+                {presentation.map((p, i) => (
+                    <section key={p.id} className="slide-edit">
+                        <h2 className="slide-edit__header" id={`slide-${p.id}`}>
+                            #{i + 1}
+                        </h2>
+                        <form className="slide-edit__content" method="post">
+                            <TextArea defaultValue={p.content} label="Slide content" name="content" />
+                            <input type="radio" name="slide" value={p.id} checked hidden readOnly />
+                            <input type="radio" name="action" value={Actions.ModifySlide} checked hidden readOnly />
+                            <PrimaryButton>Lagre</PrimaryButton>
+                            <SecondaryButton
+                                type="button"
+                                onClick={() => {
+                                    if (confirm("Er du sikker på at du vil slette denne sliden?")) {
+                                        submit(
+                                            { id: p.id, action: Actions.DeleteSlide },
+                                            { method: "delete", replace: true }
+                                        );
+                                    }
+                                }}
+                                className="jkl-spacing-l--left"
+                            >
+                                Slett
+                            </SecondaryButton>
+                        </form>
+                    </section>
+                ))}
+            </section>
         </>
     );
 }
