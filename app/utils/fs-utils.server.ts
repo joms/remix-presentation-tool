@@ -97,11 +97,11 @@ export const getSlidesForPresentation = async (presentationName: string) => {
             slidesWithMeta
                 // sort by creation time
                 .sort((a, b) => {
-                    if (
-                        (!Number.isNaN(a.attributes.order) && !Number.isNaN(b.attributes.order)) ||
-                        Number(a.attributes.order) === Number(b.attributes.order)
-                    ) {
-                        return Number(a.attributes.order) - Number(b.attributes.order);
+                    const orderA = Number(a.attributes.order);
+                    const orderB = Number(b.attributes.order);
+
+                    if (!Number.isNaN(orderA) && !Number.isNaN(orderB) && orderA !== orderB) {
+                        return orderA - orderB;
                     }
 
                     return a.creationTime - b.creationTime;
