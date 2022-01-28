@@ -47,7 +47,7 @@ export default function NewPresentation() {
         <>
             <h1>Ny presentasjon</h1>
             <Form method="post">
-                <TextInput label="Presentasjonsavn" name="presentation-name" required errorLabel={actionData?.error} />
+                <TextInput label="Presentasjonsavn" name="presentation-name" errorLabel={actionData?.error} />
                 <PrimaryButton>Lagre</PrimaryButton>
             </Form>
         </>
