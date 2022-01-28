@@ -1,0 +1,33 @@
+---
+title: PHP Skjema
+order: 4
+---
+
+# Et skjema for 10 år siden med PHP
+
+```php
+<?php
+$err = "";
+
+$username = $_POST["username"];
+$password = $_POST["password"];
+
+if (login($username, $password)) {
+    session_start();
+    $_SESSION["username"] = $username;
+
+    header("location: index.php");
+} else {
+    $err = "Feil brukernavn eller passord!"
+}
+?>
+```
+
+```html
+<form method="post" action="/login">
+    <label>Brukernavn <input type="text" name="username" /></label>
+    <label>Passord <input type="password" name="password" /></label>
+    <span><?php echo $err ?></span>
+    <button type="button">Logg inn</button>
+</form>
+```

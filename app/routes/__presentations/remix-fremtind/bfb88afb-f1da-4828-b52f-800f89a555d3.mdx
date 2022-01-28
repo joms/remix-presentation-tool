@@ -1,0 +1,58 @@
+---
+title: Et skjema i 2022 med Remix
+---
+
+# Det samme skjemaet, men i dag med Remix
+
+```tsx
+// app/routes/login.tsx
+
+// bittelitt seremoni for å etablere et sted å gjøre av sesjonen
+const storage = createCookieSessionStorage({
+    cookie: {
+        name: "__session",
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 90,
+        path: "/",
+        sameSite: "lax",
+        secrets: ["fremtind-ruler"],
+        secure: true,
+    },
+});
+
+// håndterer alle HTTP-kall som ikke er GET
+export const action: ActionFunction = async ({ request }) => {
+    const formData: FormData = await request.formData();
+
+    if (login(formData.get("username"), formData.get("password"))) {
+        const session = await storage.getSession();
+
+        session.set("username", username);
+
+        return redirect("/", {
+            headers: {
+                "Set-Cookie": await storage.commitSession(session),
+            },
+        });
+    } else {
+        return json("Feil brukernavn eller passord");
+    }
+};
+
+export default function LoginForm() {
+    const formError = useActionData<string>();
+
+    return (
+        <form method="post" action="/login">
+            <label>
+                Brukernavn <input type="text" name="username" />
+            </label>
+            <label>
+                Passord <input type="password" name="password" />
+            </label>
+            {formError && <label>{formError}</label>}
+            <button type="button">Logg inn</button>
+        </form>
+    );
+}
+```
