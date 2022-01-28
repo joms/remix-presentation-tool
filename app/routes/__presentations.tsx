@@ -1,4 +1,4 @@
-import { Link, LinksFunction, LoaderFunction, Outlet, useLoaderData, useLocation } from "remix";
+import { Link, LinksFunction, LoaderFunction, MetaFunction, Outlet, useLoaderData, useLocation } from "remix";
 import { getSlidesForPresentation, Slide } from "../utils/fs-utils.server";
 import { useMemo } from "react";
 import styleLink from "../styles/presentation.css";
@@ -13,6 +13,15 @@ export const links: LinksFunction = () => [
         rel: "stylesheet",
     },
 ];
+
+export const meta: MetaFunction = ({ data, location }) => {
+    const currentSlideIndex = data.slides.findIndex((slide) => location.pathname.includes(slide.id));
+    const title: Slide = data.slides[currentSlideIndex].attributes.title ?? "Fagtimen";
+
+    return {
+        title: `${title} - Remix`,
+    };
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
     const presentationName = new URL(request.url).pathname.split("/").filter((u) => !!u)[0];

@@ -38,6 +38,7 @@ export const links: LinksFunction = () => [
 export const meta: MetaFunction = () => {
     return { title: "Fagtimen - Remix" };
 };
+
 export default function App() {
     return (
         <html lang="en">

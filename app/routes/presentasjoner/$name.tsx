@@ -1,15 +1,35 @@
-import { ActionFunction, json, Link, LinksFunction, LoaderFunction, redirect, useLoaderData, useSubmit } from "remix";
-import { PrimaryButton, SecondaryButton, TertiaryButton } from "@fremtind/jkl-button-react";
-import { TextArea } from "@fremtind/jkl-text-input-react";
+import {
+    ActionFunction,
+    json,
+    Link,
+    LinksFunction,
+    LoaderFunction,
+    MetaFunction,
+    redirect,
+    useLoaderData,
+    useSubmit,
+} from "remix";
 import { requireSession } from "../../utils/session.server";
-import { deletePresentation, deleteSlide, getSlidesForPresentation, writeSlide } from "../../utils/fs-utils.server";
+import {
+    deletePresentation,
+    deleteSlide,
+    getSlidesForPresentation,
+    Slide,
+    writeSlide,
+} from "../../utils/fs-utils.server";
 import styleLink from "../../styles/rediger-presentasjon.css";
+import { PrimaryButton, TertiaryButton, SecondaryButton } from "@fremtind/jkl-button-react";
+import { TextArea } from "@fremtind/jkl-text-input-react";
 
 enum Actions {
     AddSlide = "AddSlide",
     ModifySlide = "ModifySlide",
     DeletePresentation = "DeletePresentation",
     DeleteSlide = "DeleteSlide",
+}
+
+interface LoaderData {
+    presentation: Slide[];
 }
 
 export const links: LinksFunction = () => [
@@ -88,7 +108,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function Presentation() {
-    const { presentation } = useLoaderData<{ presentation: Array<{ id: string; content: string }> }>();
+    const { presentation } = useLoaderData<LoaderData>();
     const submit = useSubmit();
 
     if (!presentation.length) {
@@ -135,7 +155,7 @@ export default function Presentation() {
                 {presentation.map((p, i) => (
                     <section key={p.id} className="slide-edit">
                         <h2 className="slide-edit__header" id={`slide-${p.id}`}>
-                            #{i + 1}
+                            #{i + 1} {p.attributes.title}
                         </h2>
                         <form className="slide-edit__content" method="post">
                             <TextArea autoExpand defaultValue={p.content} label="Slide content" name="content" />
