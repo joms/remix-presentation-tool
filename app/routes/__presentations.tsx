@@ -8,6 +8,10 @@ export const links: LinksFunction = () => [
         href: styleLink,
         rel: "stylesheet",
     },
+    {
+        href: "https://unpkg.com/@highlightjs/cdn-assets@11.4.0/styles/default.min.css",
+        rel: "stylesheet",
+    },
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {

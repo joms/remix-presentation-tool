@@ -138,7 +138,7 @@ export default function Presentation() {
                             #{i + 1}
                         </h2>
                         <form className="slide-edit__content" method="post">
-                            <TextArea defaultValue={p.content} label="Slide content" name="content" />
+                            <TextArea autoExpand defaultValue={p.content} label="Slide content" name="content" />
                             <input type="radio" name="slide" value={p.id} checked hidden readOnly />
                             <input type="radio" name="action" value={Actions.ModifySlide} checked hidden readOnly />
                             <PrimaryButton>Lagre</PrimaryButton>

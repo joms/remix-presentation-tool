@@ -2,10 +2,13 @@ import crypto from "crypto";
 import { statSync, readFileSync } from "fs";
 import { readdir, mkdir, stat, writeFile, rm } from "fs/promises";
 import path from "path";
+import { bundleMDX } from "mdx-bundler";
 
 export interface Slide {
     id: string;
     content: string;
+    attributes: Record<string, string>;
+    creationTime: number;
 }
 
 export interface Presentation {
@@ -63,7 +66,7 @@ export const getSlidesForPresentation = async (presentationName: string) => {
             throw FsUtilErrors.PRESENTATION_DOES_NOT_EXIST;
         }
 
-        return (
+        const slidesWithMeta = await Promise.all(
             slides
                 // get creation time of files
                 .map((s) => {
@@ -72,16 +75,36 @@ export const getSlidesForPresentation = async (presentationName: string) => {
                         time: statSync(path.join(presentationPath, s.name)).birthtime.getTime(),
                     };
                 })
-                // sort by creation time
-                .sort((a, b) => a.time - b.time)
                 // get file contents
-                .map((s) => {
+                .map(async (s) => {
+                    const slidePath = path.join(presentationPath, s.id);
+                    const fileContent = readFileSync(slidePath);
+
+                    const { frontmatter } = await bundleMDX({ source: fileContent.toString() });
+
                     const slide: Slide = {
                         id: s.id.replace(/\.mdx?$/, ""),
-                        content: readFileSync(path.join(presentationPath, s.id)).toString(),
+                        content: fileContent.toString(),
+                        attributes: frontmatter,
+                        creationTime: s.time,
                     };
 
                     return slide;
+                })
+        );
+
+        return (
+            slidesWithMeta
+                // sort by creation time
+                .sort((a, b) => {
+                    if (
+                        (!Number.isNaN(a.attributes.order) && !Number.isNaN(b.attributes.order)) ||
+                        Number(a.attributes.order) === Number(b.attributes.order)
+                    ) {
+                        return Number(a.attributes.order) - Number(b.attributes.order);
+                    }
+
+                    return a.creationTime - b.creationTime;
                 })
         );
     } catch (e) {

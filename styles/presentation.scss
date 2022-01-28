@@ -17,3 +17,7 @@ nav {
         }
     }
 }
+
+h1 {
+    @include jkl.text-style("heading-1");
+}
