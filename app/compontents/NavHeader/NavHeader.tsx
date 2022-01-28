@@ -3,7 +3,7 @@ import { Link, Form } from "remix";
 
 export const NavHeader = () => (
     <header>
-        <nav>
+        <nav className="authenticated-nav">
             <Link to="/" className="jkl-link">
                 Fagtimen - Remix
             </Link>

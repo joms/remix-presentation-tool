@@ -3,7 +3,7 @@
     $webfonts-dir: "/fonts"
 );
 
-nav {
+nav.authenticated-nav {
     background-color: jkl.$color-sand;
     padding: jkl.$spacing-xs jkl.$spacing-m jkl.$spacing-s jkl.$spacing-m;
     display: flex;

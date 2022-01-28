@@ -1,0 +1,19 @@
+@use "@fremtind/jkl-core/jkl";
+
+nav {
+    background-color: jkl.$color-sand;
+    padding: jkl.$spacing-xs jkl.$spacing-m jkl.$spacing-s jkl.$spacing-m;
+    display: flex;
+
+    & > * {
+        display: flex;
+        gap: jkl.$spacing-m;
+    }
+
+    .nav {
+        &--right {
+            flex-grow: 1;
+            justify-content: flex-end;
+        }
+    }
+}
