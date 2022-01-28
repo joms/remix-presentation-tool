@@ -43,7 +43,7 @@ export default function Present() {
             <nav>
                 <div className="nav--left">
                     {!location.pathname.includes(slides[0]?.id) && (
-                        <Link to={`${presentationName}/${slides[0]?.id}`} className="jkl-link">
+                        <Link to={`${presentationName}/${slides[currentSlideIndex - 1]?.id}`} className="jkl-link">
                             Forrige
                         </Link>
                     )}
