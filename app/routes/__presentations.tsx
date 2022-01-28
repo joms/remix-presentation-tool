@@ -2,6 +2,7 @@ import { Link, LinksFunction, LoaderFunction, MetaFunction, Outlet, useLoaderDat
 import { getSlidesForPresentation, Slide } from "../utils/fs-utils.server";
 import { useMemo } from "react";
 import styleLink from "../styles/presentation.css";
+import { requireSession } from "../utils/session.server";
 
 export const links: LinksFunction = () => [
     {
@@ -24,6 +25,7 @@ export const meta: MetaFunction = ({ data, location }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+    await requireSession(request);
     const presentationName = new URL(request.url).pathname.split("/").filter((u) => !!u)[0];
     const slides = await getSlidesForPresentation(presentationName);
 

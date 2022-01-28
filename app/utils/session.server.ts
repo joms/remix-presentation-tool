@@ -27,11 +27,10 @@ export const hasUserSession = async (request: Request) => {
     return sessionCookie.has("username");
 };
 
-export async function requireSession(request: Request, redirectTo: string = new URL(request.url).pathname) {
+export async function requireSession(request: Request) {
     const isAuthenticated = await hasUserSession(request);
     if (!isAuthenticated) {
-        const searchParams = new URLSearchParams([["redirectTo", redirectTo]]);
-        throw redirect(`/login?${searchParams}`);
+        throw redirect("/");
     }
 
     return true;

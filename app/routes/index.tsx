@@ -21,6 +21,7 @@ import { NavHeader } from "../compontents/NavHeader";
 interface LoginFormData {
     username: string;
     password: string;
+    redirectTo?: string;
 }
 
 interface UnauthenticatedLoaderData {
@@ -42,9 +43,7 @@ export const links: LinksFunction = () => [
 ];
 
 export const action: ActionFunction = async ({ request }) => {
-    const { username, password } = Object.fromEntries(
-        new URLSearchParams(await request.text())
-    ) as unknown as LoginFormData;
+    const { username, password } = Object.fromEntries(await request.formData()) as unknown as LoginFormData;
 
     const isAuthenticated = await login({ username, password });
 
