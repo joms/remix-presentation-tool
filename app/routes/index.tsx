@@ -93,8 +93,14 @@ export default function Index() {
                             variant="large"
                             errorLabel={actionData?.error}
                         >
-                            <TextInput width="320px" label="Brukernavn" name="username" />
-                            <TextInput width="320px" label="Passord" type="password" name="password" />
+                            <TextInput width="320px" label="Brukernavn" name="username" autoComplete="username" />
+                            <TextInput
+                                width="320px"
+                                label="Passord"
+                                type="password"
+                                name="password"
+                                autoComplete="current-password"
+                            />
                         </FieldGroup>
                         <PrimaryButton>Logg inn</PrimaryButton>
                     </Form>

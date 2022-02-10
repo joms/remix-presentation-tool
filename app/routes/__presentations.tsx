@@ -61,7 +61,7 @@ export default function Present() {
                     </Link>
                 </div>
             </nav>
-            <main data-theme={slides[currentSlideIndex].attributes.theme}>
+            <main data-theme={slides[currentSlideIndex].attributes.theme} className="jkl">
                 <Outlet />
             </main>
         </>
