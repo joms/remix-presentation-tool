@@ -1,6 +1,44 @@
 ---
 title: Back to basics
-order: 9
+order: 10
 ---
 
 # Tilbake til fortiden
+
+## Bruker vi HTTP-koder riktig?
+
+```
+< HTTP/1.1 200 OK
+< Connection: close
+< Date: Thu, 10 Feb 2022 10:49:08 GMT
+< Content-Type: application/json
+
+{
+  "error": "Uh oh, en ukjent feil oppstod",
+}
+```
+
+Dette ender ofte med komplekse fetchere for å håndtere forskjellige caser
+
+## Hva om vi heller bare bruker APIet?
+
+```tsx
+export const action = () => {
+    throw new Response("Uh oh, en ukjent feil oppstod", { status: 500 });
+};
+```
+
+```tsx
+export function CatchBoundary() {
+    // dette er en Response
+    const caught = useCatch();
+
+    if (caught.status === 401) {
+        return <h1>Du har ikke tilgang</h1>;
+    }
+}
+
+export function ErrorBoundary({ error }) {
+    return <h1>{error.message}</h1>;
+}
+```

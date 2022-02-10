@@ -1,4 +1,5 @@
 const { remarkMdxFrontmatter } = require("remark-mdx-frontmatter");
+const rehypeAddClasses = require("rehype-add-classes");
 
 /**
  * @type {import('@remix-run/dev/config').AppConfig}
@@ -15,7 +16,7 @@ module.exports = {
 
         return {
             remarkPlugins: [[remarkMdxFrontmatter, { name: "attributes" }]],
-            rehypePlugins: [rehypeHighlight],
+            rehypePlugins: [rehypeHighlight, [rehypeAddClasses, { a: "jkl-link" }]],
         };
     },
 };

@@ -1,0 +1,27 @@
+---
+title: Back to basics
+order: 11
+---
+
+# Tilbake til fortiden
+
+## Har vi abstrahert oss bort fra de gode gamle kjeksene?
+
+<img src="https://blog.postman.com/wp-content/uploads/2020/06/image6.png" alt="oAuth PKCE flow" />
+
+## Hva om vi heller bare bruker APIet?
+
+```tsx
+export const action = () => {
+    const session = await storage.getSession();
+
+    session.set("username", username);
+
+    // Response status: 302, headers: { "Set-Cookie": "..." }
+    return redirect("/", {
+        headers: {
+            "Set-Cookie": await storage.commitSession(session),
+        },
+    });
+};
+```

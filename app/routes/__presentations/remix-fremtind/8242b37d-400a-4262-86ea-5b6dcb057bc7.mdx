@@ -1,0 +1,42 @@
+---
+title: Optimistic UI
+order: 13
+---
+
+# Optimistic UI
+
+> Når du viser resultatet før serveren har hatt tid til å eksekvere
+
+```tsx
+import { Form, redirect, useTransition } from "remix";
+
+import { createProject } from "~/utils";
+import { ProjectView } from "~/components/project";
+
+export const action: ActionFunction = async ({ request }) => {
+    const body = await request.formData();
+    const newProject = Object.fromEntries(body);
+    const project = await createProject(newProject);
+    return redirect(`/projects/${project.id}`);
+};
+
+export default function NewProject() {
+    const transition = useTransition();
+
+    return transition.submission ? (
+        <ProjectView project={Object.fromEntries(transition.submission.formData)} />
+    ) : (
+        <>
+            <h2>New Project</h2>
+            <Form method="post">
+                <label>
+                    Title: <input type="text" name="title" />
+                </label>
+                <button type="submit">Create Project</button>
+            </Form>
+        </>
+    );
+}
+```
+
+[Optimistic UI eksempel](https://remix.run/docs/en/v1/guides/optimistic-ui)
