@@ -1,0 +1,53 @@
+---
+title: Hvorfor er jeg frelst
+order: 8
+---
+
+import { UnorderedList, ListItem } from "@fremtind/jkl-list-react";
+
+# Hvorfor er jeg frelst
+
+> Det mest revolusjonerende i React-verden siden react
+
+## Den siste evolusjonen av server rendering?
+
+Backbone &rarr; Angular &rarr; React
+
+Express &rarr; Next &rarr; Remix
+
+&nbsp;
+
+<UnorderedList>
+    <ListItem>Fjerner i stor grad behovet for spinnere</ListItem>
+    <ListItem>Trenger ikke APIer på samme måte lenger</ListItem>
+    <ListItem>Lar en hente bare det man trenger uten GQL</ListItem>
+    <ListItem>
+        Tar tilbake kontrollen ved å bruke tidligere abstraherte teknologier
+        <UnorderedList>
+            <ListItem>Caching</ListItem>
+            <ListItem>Cookies</ListItem>
+            <ListItem>HTTP-response koder</ListItem>
+        </UnorderedList>
+    </ListItem>
+    <ListItem>Progressive enhancement</ListItem>
+    <ListItem>Nested routing</ListItem>
+    <ListItem>Intuitiv server rendering</ListItem>
+</UnorderedList>
+
+## Laget av noen skikkelig smarte folk
+
+<div className="remix-creators">
+    {[
+        // to me you are all equally awesome!
+        { name: "Kent C. Dodds", img: "https://remix.run/k.jpg" },
+        { name: "Ryan Florence", img: "https://remix.run/r.jpg" },
+        { name: "Michael Jackson", img: "https://remix.run/m.jpg" },
+    ]
+        .sort(() => 0.5 - Math.random())
+        .map((c) => (
+            <div className="remix-creator">
+                <img src={c.img} alt={c.name} />
+                <h3>{c.name}</h3>
+            </div>
+        ))}
+</div>

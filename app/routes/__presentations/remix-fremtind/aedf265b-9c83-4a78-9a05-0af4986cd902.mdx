@@ -1,0 +1,32 @@
+---
+title: Plattformagnostisk
+order: 7
+---
+
+import { UnorderedList, ListItem } from "@fremtind/jkl-list-react";
+
+# Plattformagnostisk
+
+Kan i teorien deployes hvor som helst, og kommer med innebygd produksjonsklar server.
+
+## Offisielle adaptere
+
+<UnorderedList>
+    <ListItem>@remix-run/express</ListItem>
+    <ListItem>@remix-run/architect</ListItem>
+    <ListItem>@remix-run/vercel</ListItem>
+    <ListItem>@remix-run/netlify</ListItem>
+    <ListItem>@remix-run/cloudflare-workers</ListItem>
+</UnorderedList>
+
+Det er relativt kurant å lage sin egen adapter også.
+
+## Kjøremiljø
+
+På grunn av Web Fetch APIet kan Remix kjøre i hvilke som helst JavaScript-miljø:
+
+<UnorderedList>
+    <ListItem>Node</ListItem>
+    <ListItem>CloudFlare Workers</ListItem>
+    <ListItem>Deno</ListItem>
+</UnorderedList>

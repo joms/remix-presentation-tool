@@ -17,6 +17,8 @@
         "@fremtind/jkl-core": "^8.3.1",
         "@fremtind/jkl-field-group": "^4.0.7",
         "@fremtind/jkl-field-group-react": "^4.1.6",
+        "@fremtind/jkl-list": "^6.0.11",
+        "@fremtind/jkl-list-react": "^6.1.9",
         "@fremtind/jkl-logo": "^6.1.4",
         "@fremtind/jkl-logo-react": "^7.1.7",
         "@fremtind/jkl-text-input": "^6.0.12",

@@ -1,0 +1,37 @@
+---
+title: Hva betyr dette?
+order: 4
+---
+
+import { UnorderedList, ListItem } from "@fremtind/jkl-list-react";
+
+# Et fullstack rammeverk for server rendering
+
+<UnorderedList>
+    <ListItem>
+        `export const links: LinksFunction = () => {}`
+        <UnorderedList>
+            <ListItem>Fyller `<head>` basert på et array av linker (script, css osv)</ListItem>
+        </UnorderedList>
+    </ListItem>
+    <ListItem>
+        `export const meta: MetaFunction = () => {}`
+        <UnorderedList>
+            <ListItem>Fyller `<head>` med meta-tagger (title, meta osv)</ListItem>
+        </UnorderedList>
+    </ListItem>
+    <ListItem>
+        `export const loader: LoaderFunction = () => {}`
+        <UnorderedList>
+            <ListItem>GET</ListItem>
+        </UnorderedList>
+    </ListItem>
+    <ListItem>
+        `export const action: ActionFunction = () => {}`
+        <UnorderedList>
+            <ListItem>POST</ListItem>
+            <ListItem>PUT</ListItem>
+            <ListItem>DELETE</ListItem>
+        </UnorderedList>
+    </ListItem>
+</UnorderedList>

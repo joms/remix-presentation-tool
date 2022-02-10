@@ -1,0 +1,46 @@
+---
+order: 5
+---
+
+import { UnorderedList, ListItem } from "@fremtind/jkl-list-react";
+
+# Sømløs server og browser runtime
+
+## Eksekveres kun på server
+
+`export const loader: LoaderFunction = () => {}`
+
+`export const action: ActionFunction = () => {}`
+
+## Rendres både på server og klient
+
+```tsx
+import { Form } from "remix";
+
+export default function MyPage() {
+    const dataFromAction = useActionData();
+    const dataFromLoader = useLoaderData();
+
+    return <Form>{...}</Form>;
+}
+```
+
+Dette rendres som et `<form>`, men om man har JavaScript vil ikke siden refreshes og input tømmes
+
+### Feilhåndtering knytter sammen tilbakemeldinger fra serverside til klientside
+
+```tsx
+export function CatchBoundary() {
+    const caught = useCatch();
+
+    if (caught.status === 401) {
+        return <h1>Du har ikke tilgang</h1>;
+    }
+}
+```
+
+```tsx
+export function ErrorBoundary() {
+    return <h1>En ukjent feil har oppstått</h1>;
+}
+```

@@ -1,4 +1,4 @@
-import { Link, LinksFunction, LoaderFunction, MetaFunction, Outlet, useLoaderData, useLocation } from "remix";
+import { Link, LinksFunction, LoaderFunction, MetaFunction, Outlet, useCatch, useLoaderData, useLocation } from "remix";
 import { getSlidesForPresentation, Slide } from "../utils/fs-utils.server";
 import { useMemo } from "react";
 import styleLink from "../styles/presentation.css";
@@ -16,7 +16,7 @@ export const links: LinksFunction = () => [
 ];
 
 export const meta: MetaFunction = ({ data, location }) => {
-    const currentSlideIndex = data.slides.findIndex((slide) => location.pathname.includes(slide.id));
+    const currentSlideIndex = data.slides.findIndex((slide: Slide) => location.pathname.includes(slide.id));
     const title: Slide = data.slides[currentSlideIndex].attributes.title ?? "Fagtimen";
 
     return {
@@ -61,7 +61,7 @@ export default function Present() {
                     </Link>
                 </div>
             </nav>
-            <main>
+            <main data-theme={slides[currentSlideIndex].attributes.theme}>
                 <Outlet />
             </main>
         </>

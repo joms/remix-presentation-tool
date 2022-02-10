@@ -1,5 +1,6 @@
 ---
 title: Et skjema i 2022 med Remix
+order: 30
 ---
 
 # Det samme skjemaet, men i dag med Remix
@@ -20,7 +21,6 @@ const storage = createCookieSessionStorage({
     },
 });
 
-// håndterer alle HTTP-kall som ikke er GET
 export const action: ActionFunction = async ({ request }) => {
     const formData: FormData = await request.formData();
 
